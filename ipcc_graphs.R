@@ -98,7 +98,7 @@ ggplot() +
     aes(label=total,x=midY,y=maxV+1000),
     hjust = 0.5
   ) +
-  labs(x="Year",y="Publication Count") +
+  labs(x="Year",y="Number of Publications") +
   theme_classic() +
   theme(
     text=element_text(size=12),
@@ -161,10 +161,10 @@ shares <- ggplot(mutate(IPCC_shares,source="WoS")) +
   labs(
     #x="Assessment Period",
     x="",
-    y="Publication Share"
+    y="Publication Share [%]"
   ) +
   geom_bar(
-    aes(source,share,fill=AP),
+    aes(source,share*100,fill=AP),
     stat="identity",
     colour="grey22",
     size=0.1,
