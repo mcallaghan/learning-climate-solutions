@@ -345,7 +345,7 @@ pn <- scimetrix::paperNumbers(alldocs,"oecd",graph=T) + scale_x_continuous(break
 
 shares <- scimetrix::paperShares(alldocs,"oecd","all","line",graph=T)  + 
   scale_x_continuous(breaks = seq(1985,2020,by=5)) +
-  labs(y="Publication Share [%]") +
+  labs(x="Year",y="Publication Share [%]") +
   scale_color_brewer(palette="Set3",name="Subject Area",guide=guide_legend(reverse=F))
 
 shares
