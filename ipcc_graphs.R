@@ -315,7 +315,7 @@ ggplot(
     hjust = 0.5
   ) +
   scale_fill_brewer(palette="Spectral",name="Assessment Period") +
-  labs(x="Year",y="Publications Count") +
+  labs(x="Year",y="Number of Publications") +
   theme_classic() +
   theme(
     text=element_text(size=12),
