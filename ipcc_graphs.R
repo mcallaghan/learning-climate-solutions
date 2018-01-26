@@ -32,8 +32,8 @@ papers$AP <- cut(papers$PY,
                  c(NA,"AR1","AR2","AR3","AR4","AR5","AR6")
 )
 
-q <- 'SELECT COUNT(DISTINCT "UT") FROM "scoping_doc"
-  INNER JOIN "scoping_doc_query" ON ("scoping_doc"."UT" = "scoping_doc_query"."doc_id") 
+q <- 'SELECT COUNT(DISTINCT "id") FROM "scoping_doc"
+  INNER JOIN "scoping_doc_query" ON ("scoping_doc"."id" = "scoping_doc_query"."doc_id") 
   WHERE "scoping_doc_query"."query_id" = 365'
 
 total <- as.numeric(dbGetQuery(con, q))
@@ -294,18 +294,23 @@ apCounts_upper[apCounts_upper$AP=="AR6","midY"] <- apCounts_upper[apCounts_upper
 
 #######################################
 ## plot projections
+
+bwidth = 0.8
+
 ggplot(
 ) +
   geom_bar(
     data = filter(future_long,PY > 1985,type=="lower" ),
     aes(PY,value,fill=AP),
     stat="identity",
+    width=bwidth,
     colour="grey22"
   ) +
   geom_bar(
     data = filter(future_long,PY > 1985,type=="upper_2010" ),
     aes(PY,value,fill=AP),
     stat="identity",
+    width=bwidth,
     alpha=0.5,
     colour="grey22"
   ) +

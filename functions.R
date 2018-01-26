@@ -1,11 +1,11 @@
 wordsearch <- function(regex,fields,con,query,count=F) {
-  sel <- '"scoping_doc"."UT", "scoping_doc"."title", "scoping_doc"."content", "scoping_doc"."PY", "scoping_doc"."source", "scoping_doc"."uploader_id", "scoping_doc"."date"' 
+  sel <- '"scoping_doc"."id", "scoping_doc"."title", "scoping_doc"."content", "scoping_doc"."PY", "scoping_doc"."source", "scoping_doc"."uploader_id", "scoping_doc"."date"' 
   if (count) {
-    sel <- 'COUNT(DISTINCT "scoping_doc"."UT")'
+    sel <- 'COUNT(DISTINCT "scoping_doc"."id")'
   }
   q <- paste0('SELECT ',sel,' FROM "scoping_doc"
-  INNER JOIN "scoping_doc_query" ON ("scoping_doc"."UT" = "scoping_doc_query"."doc_id") 
-  LEFT OUTER JOIN "scoping_wosarticle" ON ("scoping_doc"."UT" = "scoping_wosarticle"."doc_id") 
+  INNER JOIN "scoping_doc_query" ON ("scoping_doc"."id" = "scoping_doc_query"."doc_id") 
+  LEFT OidER JOIN "scoping_wosarticle" ON ("scoping_doc"."id" = "scoping_wosarticle"."doc_id") 
   WHERE (("scoping_doc_query"."query_id" = ',query)
   i <- 0
   for (f in fields) {
@@ -72,8 +72,8 @@ arr <- function(a,con){
 }
 
 ppy <- function(y,con){
-  q = paste0('SELECT COUNT(DISTINCT "UT") FROM "scoping_doc"
-  INNER JOIN "scoping_doc_query" ON ("scoping_doc"."UT" = "scoping_doc_query"."doc_id") 
+  q = paste0('SELECT COUNT(DISTINCT "scoping_doc"."id") FROM "scoping_doc"
+  INNER JOIN "scoping_doc_query" ON ("scoping_doc"."id" = "scoping_doc_query"."doc_id") 
   WHERE "scoping_doc"."PY" = ',y,'
   AND "scoping_doc_query"."query_id" =',365)
   
