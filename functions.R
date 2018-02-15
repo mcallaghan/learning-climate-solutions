@@ -75,7 +75,7 @@ ppy <- function(y,con){
   q = paste0('SELECT COUNT(DISTINCT "scoping_doc"."id") FROM "scoping_doc"
   INNER JOIN "scoping_doc_query" ON ("scoping_doc"."id" = "scoping_doc_query"."doc_id") 
   WHERE "scoping_doc"."PY" = ',y,'
-  AND "scoping_doc_query"."query_id" =',365)
+  AND "scoping_doc_query"."query_id" =',2355)
   
   return(as.numeric(dbGetQuery(con, q)))
 }

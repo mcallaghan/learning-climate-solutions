@@ -20,7 +20,7 @@ con <- dbConnect(drv, dbname = "tmv_app",
                  user = pg_user, password = pg_pw)
 
 papers <- data.frame(
-  PY = seq(1985,2016)
+  PY = seq(1985,2018)
 )
 
 papers$n <- as.numeric(lapply(papers$PY,ppy,con))
@@ -34,7 +34,7 @@ papers$AP <- cut(papers$PY,
 
 q <- 'SELECT COUNT(DISTINCT "id") FROM "scoping_doc"
   INNER JOIN "scoping_doc_query" ON ("scoping_doc"."id" = "scoping_doc_query"."doc_id") 
-  WHERE "scoping_doc_query"."query_id" = 365'
+  WHERE "scoping_doc_query"."query_id" = 2355'
 
 total <- as.numeric(dbGetQuery(con, q))
 
@@ -84,18 +84,22 @@ IPCC_shares <- filter(IPCC_totals,contemporary=="Current Cycle") %>%
 ## Colorscale 
 APscale <- brewer.pal(6,"Spectral")
 
+
+bwidth = 0.8
+
 ####################
 ### Figure 1: Growth
-ggplot() +
+p <- ggplot() +
   geom_bar( # Bars for each year, colour coded by AP
-    data = filter(papers,PY > 1985 & PY < 2017),
+    data = filter(papers,PY > 1985 & PY < 2018),
     aes(PY,n,fill=AP),
+    width=bwidth,
     stat="identity",
     colour="grey22"
   ) +
   geom_text( # Labels
     data=apCounts,
-    aes(label=total,x=midY,y=maxV+1000),
+    aes(label=total,x=midY,y=maxV+1500),
     hjust = 0.5
   ) +
   labs(x="Year",y="Number of Publications") +
@@ -109,9 +113,17 @@ ggplot() +
     panel.border=element_rect(size=0.2,colour="grey22",fill=NA)
   ) +
   scale_fill_manual(values=APscale[1:6],name="Assessment Period") +
-  scale_x_continuous(breaks = seq(1985,2015,by=5))
+  scale_x_continuous(breaks = seq(1985,2015,by=5)) +
+  scale_y_continuous(labels =  scales::unit_format(unit=""))
+
+p
 
 ggsave("plots/pubs_time_spectral.png",width=8,height=5)
+
+p + scale_x_continuous(breaks = seq(1985,2015,by=5),limits=c(1985,2022)) +
+  scale_y_continuous(labels =  scales::unit_format(unit=""), limits=c(0,65000))
+
+ggsave("plots/pubs_time_projections_1.png",width=8,height=5)
 
 ###################
 ### Figure 3: WoS vs IPCC
@@ -295,7 +307,6 @@ apCounts_upper[apCounts_upper$AP=="AR6","midY"] <- apCounts_upper[apCounts_upper
 #######################################
 ## plot projections
 
-bwidth = 0.8
 
 ggplot(
 ) +
@@ -329,9 +340,12 @@ ggplot(
     legend.direction="horizontal",
     panel.grid.major.y=element_line(size=0.2,colour="grey22"),
     panel.border=element_rect(size=0.2,colour="grey22",fill=NA)
-  ) + scale_x_continuous(breaks = seq(1985,2020,by=5))
+  ) + scale_x_continuous(breaks = seq(1985,2020,by=5)) + 
+  scale_y_continuous(labels =  scales::unit_format(unit=""), limits=c(0,65000))
 
 ggsave("plots/pubs_time_projections_2016.png",width=8,height=5)
+ggsave("plots/pubs_time_projections_2016.pdf",width=8,height=5)
+ggsave("plots/pubs_time_projections_2016.svg",width=8,height=5)
 
 ##############################################################
 ## Get all the papers and show by OECD cat
