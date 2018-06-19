@@ -32,7 +32,7 @@ papers$AP <- cut(papers$PY,
                  c(NA,"AR1","AR2","AR3","AR4","AR5","AR6")
 )
 
-q <- 'SELECT COUNT(DISTINCT "id") FROM "scoping_doc"
+q <- 'SELECT COUNT(DISTINCT "scoping_doc"."id") FROM "scoping_doc"
   INNER JOIN "scoping_doc_query" ON ("scoping_doc"."id" = "scoping_doc_query"."doc_id") 
   WHERE "scoping_doc_query"."query_id" = 2355'
 
@@ -156,6 +156,10 @@ bars <-ggplot(filter(all_data,AP!="AR6")) +
   facet_wrap(~AP,nrow=1) +
   labs(x="",y="Number of Publications")
 
+
+ggsave("plots/wos_IPCC_bars.svg",bars,width=8,height=5,units="in")
+
+
 print(bars)
 
 ## Graph IPCC shares of WoS refs
@@ -235,19 +239,19 @@ ggsave("plots/current_trend.png",width=6,height=4,units="in")
 
 ########################################################
 
-papers <- filter(papers,PY<2017) %>% ungroup()
+papers <- filter(papers,PY<2018) %>% ungroup()
 
-growth <- gRate(mutate(papers,n=records),"query",1990,2016,total=T)
+growth <- gRate(mutate(papers,n=records),"query",1990,2017,total=T)
 
-growth <- scimetrix::gRate(mutate(papers,n=records),"query",1990,2016,total=T)
+growth <- scimetrix::gRate(mutate(papers,n=records),"query",1990,2017,total=T)
 
-ygrowth <- filter(papers, PY < 2017) %>%
+ygrowth <- filter(papers, PY < 2018) %>%
   arrange(PY) %>%
   mutate(pgrowth = (n - lag(n))/lag(n))
 
 future <- select(filter(papers,PY>1985 & query=="all"),PY,n) %>%
   arrange(PY) %>%
-  rbind(data.frame(PY=c(2017,2018,2019,2020,2021),n=NA)) %>%
+  rbind(data.frame(PY=c(2018,2019,2020,2021),n=NA)) %>%
   mutate(lower=NA,upper_1990=NA,upper_2010=NA)
 
 for (i in 1:length(future$PY)) {
